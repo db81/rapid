@@ -358,8 +358,11 @@ class Repository(object):
 				packages[name].dependencies == deps and tag):
 				packages[name].tags.add(tag)
 
-		with closing(gzip.open(self.versions_gz)) as f:
-			map(read_line, f)
+		try:
+			with closing(gzip.open(self.versions_gz)) as f:
+				map(read_line, f)
+		except IOError:
+			pass # No versions in this repo.
 
 		return packages
 
